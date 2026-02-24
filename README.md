@@ -1,63 +1,98 @@
-# MedGemaCare
+# 🏥 MedGemma Patient Management System
 
-> **Production-grade FastAPI application for medical report summarization and analysis using Google's MedGemma model with RAG (Retrieval-Augmented Generation) capabilities.**
+> **A complete full-stack web application for medical report analysis and patient management using Google's MedGemma AI model.**
 
-Built for doctors and healthcare professionals to efficiently analyze medical reports, extract insights, and generate summaries.
+A production-grade **Patient Management System (PMS)** combining a modern React frontend with a powerful FastAPI backend. Designed for doctors and healthcare professionals to manage patients, upload medical reports, write prescriptions, and leverage AI-powered analysis for clinical decision support.
+
+**Live Demo:** Frontend at `http://localhost:5173` | Backend API at `http://localhost:8000`
 
 ---
 
 ## 📋 Table of Contents
 
+- [Project Overview](#project-overview)
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Installation](#installation)
-- [Configuration](#configuration)
-- [Running the API](#running-the-api)
-- [API Endpoints](#api-endpoints)
-- [Usage Examples](#usage-examples)
-- [Docker Deployment](#docker-deployment)
+- [Running the Application](#running-the-application)
+- [Frontend Guide](#frontend-guide)
+- [Backend API](#backend-api)
+- [Database & Data](#database--data)
 - [Project Structure](#project-structure)
 - [Technology Stack](#technology-stack)
 - [Development](#development)
-- [Testing](#testing)
+- [Docker Deployment](#docker-deployment)
 - [Troubleshooting](#troubleshooting)
-- [Production Deployment](#production-deployment)
+
+---
+
+## 📖 Project Overview
+
+### What is MedGemma PMS?
+
+A **complete Patient Management System** that brings AI-powered medical analysis to healthcare professionals:
+
+- **👨‍⚕️ For Doctors**: Manage patient profiles, write prescriptions, upload medical reports, and get instant AI analysis
+- **🤖 AI-Powered**: Uses Google's MedGemma 1.5 4B model for medical report summarization and image analysis
+- **📱 Modern UI**: Beautiful, responsive React interface with real-time updates
+- **🔒 Secure**: User authentication with role-based access (Admin, Doctor)
+- **⚡ Fast**: Lazy-loaded AI model, optimized frontend with debouncing and memoization
+- **📊 Complete**: Patient CRUD, prescription management, report uploads, AI analysis all in one place
+
+### Key Workflows
+
+1. **Login** → Select Patient → View Profile → Upload Report → AI Analyze → View Results
+2. **Add Patient** → Create Prescriptions → Track Medical History → Generate Insights
+3. **Upload Medical Images** → AI Vision Analysis → Extract Findings → Store in Database
 
 ---
 
 ## ✨ Features
 
-### Core Capabilities
-- ✅ **Medical Report Summarization** - Generate concise summaries from lengthy medical reports
-- ✅ **Question Answering** - Ask specific questions about medical reports and get accurate answers
-- ✅ **Document Processing** - Support for PDF and text documents with automatic text extraction
-- ✅ **Image Processing** - OCR support for medical images (scans, X-rays, handwritten notes)
-- ✅ **RAG Support** - Handle large documents efficiently with vector-based retrieval
-- ✅ **Multi-modal Support** - Process both text and image inputs
+### Frontend Features
+- ✅ **Modern Dashboard** - Beautiful patient list with search and filtering
+- ✅ **Patient Management** - Create, view, update patient profiles
+- ✅ **Prescription Management** - Add and manage patient prescriptions with clinical notes
+- ✅ **Report Upload** - Upload PDF, TXT, JPG, PNG medical reports
+- ✅ **AI Analysis** - One-click AI analysis for both documents and images
+- ✅ **Real-time Results** - View AI analysis results inline with loading states
+- ✅ **Error Handling** - User-friendly error messages and validation
+- ✅ **Responsive Design** - Works on desktop, tablet, and mobile
+
+### Backend Features
+- ✅ **Patient CRUD API** - Full patient management endpoints
+- ✅ **Medical Report Summarization** - AI-powered text summarization
+- ✅ **Image Analysis** - Vision model for medical image analysis
+- ✅ **Document Processing** - PDF and TXT text extraction
+- ✅ **File Management** - Secure file upload and serving
+- ✅ **User Authentication** - Login with role-based access control
+- ✅ **Database** - SQLite with patient, prescription, and report tables
+- ✅ **Lazy Model Loading** - AI model loads on first request (not on startup)
 
 ### Production Features
-- ✅ **Modular Architecture** - Clean, maintainable, and scalable code structure
-- ✅ **Type Safety** - Full type hints with Pydantic models
+- ✅ **Type Safety** - Full TypeScript frontend + Pydantic backend
 - ✅ **Error Handling** - Comprehensive exception handling and logging
-- ✅ **API Documentation** - Interactive Swagger UI and ReDoc
+- ✅ **API Documentation** - Interactive Swagger UI at `/docs`
 - ✅ **Docker Support** - Easy deployment with Docker and Docker Compose
-- ✅ **Testing** - Unit and integration tests with pytest
-- ✅ **Logging** - Structured logging with rotation and levels
-- ✅ **Configuration** - Environment-based configuration management
-- ✅ **GPU Acceleration** - CUDA support with automatic fallback to CPU
+- ✅ **Testing** - Unit tests with pytest
+- ✅ **Logging** - Structured logging with rotation
+- ✅ **Configuration** - Environment-based configuration
+- ✅ **GPU Acceleration** - CUDA support with automatic CPU fallback
 - ✅ **Model Quantization** - 4-bit/8-bit quantization for memory efficiency
 
 ---
 
 ## 🚀 Quick Start
 
-Get up and running in 5 minutes!
+Get the full application running in 5 minutes!
 
 ### Prerequisites
-- Python 3.9+ installed
-- (Optional) CUDA-capable GPU for faster inference
-- At least 8GB RAM
-- At least 10GB disk space
+- **Python 3.9+** installed
+- **Node.js 18+** installed (for frontend)
+- **npm** or **yarn** (comes with Node.js)
+- At least **8GB RAM**
+- At least **10GB disk space** (for AI model)
+- (Optional) CUDA-capable GPU for faster AI inference
 
 ### Automated Setup (Recommended)
 
@@ -75,71 +110,106 @@ chmod +x scripts/setup.sh
 ### Manual Setup
 
 ```bash
-# 1. Create virtual environment
+# 1. Backend setup
 python -m venv venv
 
-# 2. Activate virtual environment
 # Windows:
 venv\Scripts\activate
 # Linux/Mac:
 source venv/bin/activate
 
-# 3. Install dependencies
 pip install -r requirements.txt
-
-# 4. Create configuration
 cp .env.example .env
-
-# 5. Create directories
 mkdir models vector_store logs
+
+# 2. Frontend setup
+cd frontend/doctorms
+npm install
+cd ../..
 ```
 
-### Run the API
+### Run the Application
 
+**Terminal 1 - Backend (FastAPI):**
 ```bash
 python run.py
+# Backend starts at http://localhost:8000
 ```
 
-The API will start at `http://localhost:8000`
-
-### Test the API
-
+**Terminal 2 - Frontend (React + Vite):**
 ```bash
-# Check health
-curl http://localhost:8000/health
-
-# Access interactive docs
-# Open browser: http://localhost:8000/docs
+cd frontend/doctorms
+npm run dev
+# Frontend starts at http://localhost:5173
 ```
+
+### Access the Application
+
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
+
+### Default Credentials
+
+| Username | Password | Role |
+|----------|----------|------|
+| `admin` | `admin123` | Admin |
+| `doctor` | `doctor123` | Doctor |
+| `drsmith` | `smith123` | Doctor |
 
 ---
 
 ## 📦 Installation
 
-### Detailed Installation Steps
+### Step-by-Step Installation
+
+#### Backend Setup
 
 ```bash
-# 1. Clone the repository (if applicable)
+# 1. Clone the repository
 git clone <repository-url>
-cd hack-nagpur
+cd medgemma-pms
 
-# 2. Create and activate virtual environment
+# 2. Create Python virtual environment
 python -m venv venv
 
-# Windows:
+# Activate (Windows):
 venv\Scripts\activate
 
-# Linux/Mac:
+# Activate (Linux/Mac):
 source venv/bin/activate
 
-# 3. Install dependencies
+# 3. Install Python dependencies
 pip install -r requirements.txt
 
-# 4. Setup configuration
+# 4. Setup environment configuration
 cp .env.example .env
 
 # 5. Create necessary directories
-mkdir models vector_store logs
+mkdir -p models vector_store logs data/uploads
+```
+
+#### Frontend Setup
+
+```bash
+# 1. Navigate to frontend directory
+cd frontend/doctorms
+
+# 2. Install Node dependencies
+npm install
+
+# 3. Return to root
+cd ../..
+```
+
+### Verify Installation
+
+```bash
+# Test backend
+python -c "import fastapi; print('✓ FastAPI installed')"
+
+# Test frontend
+cd frontend/doctorms && npm list react && cd ../..
 ```
 
 ---
@@ -212,38 +282,91 @@ CORS_ORIGINS=https://yourdomain.com
 
 ---
 
-## 🏃 Running the API
+## 🏃 Running the Application
 
-### Development Mode
+### Development Mode (Recommended)
 
+**Terminal 1 - Start Backend:**
 ```bash
-# Using the run script
-python run.py
+# Activate virtual environment first
+# Windows: venv\Scripts\activate
+# Linux/Mac: source venv/bin/activate
 
-# Or with uvicorn directly
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python run.py
+# Backend runs at http://localhost:8000
+# API docs at http://localhost:8000/docs
+```
+
+**Terminal 2 - Start Frontend:**
+```bash
+cd frontend/doctorms
+npm run dev
+# Frontend runs at http://localhost:5173
+# Hot reload enabled - changes appear instantly
 ```
 
 ### Production Mode
 
 ```bash
-# With multiple workers
+# Backend with multiple workers
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
 
-# Or use the run script (configured via .env)
-python run.py
+# Frontend build
+cd frontend/doctorms
+npm run build
+# Creates optimized build in dist/
 ```
 
-### Access the API
+### Access Points
 
-- **API Base URL**: http://localhost:8000
-- **Interactive Docs (Swagger UI)**: http://localhost:8000/docs
-- **Alternative Docs (ReDoc)**: http://localhost:8000/redoc
-- **Health Check**: http://localhost:8000/health
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Frontend** | http://localhost:5173 | Patient Management UI |
+| **Backend API** | http://localhost:8000 | REST API endpoints |
+| **API Docs** | http://localhost:8000/docs | Interactive Swagger UI |
+| **Health Check** | http://localhost:8000/health | API status |
 
 ---
 
-## 🔌 API Endpoints
+## 🎨 Frontend Guide
+
+### User Interface Overview
+
+#### Login Page
+- Clean, modern login form
+- Default credentials: `doctor/doctor123`
+- Role-based access (Admin/Doctor)
+
+#### Dashboard
+- **Patient List** - Search and filter patients
+- **Add Patient** - Create new patient profiles
+- **Quick Stats** - Total patients, recent activity
+- **Patient Cards** - Click to view full profile
+
+#### Patient Details
+Four main tabs:
+
+1. **Overview** - Patient info, age, gender, medical history
+2. **Prescriptions** - Add/view prescriptions with clinical notes
+3. **Reports** - Upload and manage medical reports
+4. **AI Analysis** - View AI-generated insights
+
+#### Reports Tab Features
+- **Upload** - Drag-drop or click to upload PDF, TXT, JPG, PNG
+- **AI Analyze** - One-click AI analysis button
+- **Download** - Download uploaded files
+- **Results** - View AI analysis inline with findings
+
+### Frontend Technology
+- **React 19** - Modern UI framework
+- **TypeScript** - Type-safe code
+- **Vite** - Lightning-fast dev server
+- **CSS Variables** - Consistent theming
+- **Responsive Design** - Mobile-friendly
+
+---
+
+## 🔌 Backend API Endpoints
 
 ### 1. Health Check
 
@@ -260,14 +383,37 @@ curl http://localhost:8000/health
 ```json
 {
   "status": "healthy",
-  "model_loaded": true,
+  "model_loaded": false,
   "version": "1.0.0"
 }
 ```
 
 ---
 
-### 2. Text Summarization
+### 2. Patient Management
+
+**Endpoints:**
+- `POST /login` - User login
+- `GET /patients` - List all patients
+- `POST /patients` - Create new patient
+- `GET /patients/{id}` - Get patient details
+- `PUT /patients/{id}` - Update patient
+- `DELETE /patients/{id}` - Delete patient
+
+**Example - Create Patient:**
+```bash
+curl -X POST "http://localhost:8000/patients" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "age": 45,
+    "gender": "M"
+  }'
+```
+
+---
+
+### 3. Text Summarization
 
 **Endpoint:** `POST /api/v1/summarize`
 
@@ -278,229 +424,222 @@ curl http://localhost:8000/health
 curl -X POST "http://localhost:8000/api/v1/summarize" \
   -H "Content-Type: application/json" \
   -d '{
-    "text": "Patient presents with fever and cough. Temperature 101°F. Prescribed antibiotics.",
-    "max_length": 512,
-    "temperature": 0.7
+    "text": "Patient presents with fever and cough. Temperature 101°F. Prescribed antibiotics."
   }'
 ```
-
-**Parameters:**
-- `text` (required): Medical report text to summarize
-- `max_length` (optional): Maximum length of summary (50-2048, default: 512)
-- `temperature` (optional): Sampling temperature (0.1-1.0, default: 0.7)
 
 **Response:**
 ```json
 {
-  "summary": "Patient has fever (101°F) and cough. Antibiotics prescribed.",
-  "input_length": 75,
-  "summary_length": 52
+  "summary": "Patient has fever (101°F) and cough. Antibiotics prescribed."
 }
 ```
 
 ---
 
-### 3. Question Answering
+### 4. Image Analysis
 
-**Endpoint:** `POST /api/v1/analyze`
+**Endpoint:** `POST /api/v1/analyze/image`
 
-**Description:** Answer questions about medical reports
+**Description:** Analyze medical images (X-rays, scans, etc.)
 
 **Request:**
 ```bash
-curl -X POST "http://localhost:8000/api/v1/analyze" \
+curl -X POST "http://localhost:8000/api/v1/analyze/image" \
+  -F "file=@xray.jpg" \
+  -F "query=Analyze this X-ray image"
+```
+
+**Supported Formats:** JPG, JPEG, PNG, GIF, BMP, TIFF, WEBP
+
+**Response:**
+```json
+{
+  "analysis": "X-ray shows normal findings with no abnormalities detected...",
+  "filename": "xray.jpg"
+}
+```
+
+---
+
+### 5. Report Management
+
+**Endpoints:**
+- `POST /reports` - Upload medical report
+- `GET /reports/{patient_id}` - Get patient's reports
+- `GET /files/{filename}` - Download report file
+- `GET /reports/{filename}/extract-text` - Extract text from PDF/TXT
+
+**Example - Upload Report:**
+```bash
+curl -X POST "http://localhost:8000/reports" \
+  -F "file=@report.pdf" \
+  -F "patient_id=1" \
+  -F "title=Blood Test Report" \
+  -F "doctor_name=Dr. Smith"
+```
+
+---
+
+### 6. Prescription Management
+
+**Endpoints:**
+- `POST /prescriptions` - Add prescription
+- `GET /prescriptions/{patient_id}` - Get patient's prescriptions
+- `PUT /prescriptions/{id}` - Update prescription
+- `DELETE /prescriptions/{id}` - Delete prescription
+
+**Example - Add Prescription:**
+```bash
+curl -X POST "http://localhost:8000/prescriptions" \
   -H "Content-Type: application/json" \
   -d '{
-    "text": "Patient presents with fever and cough. Temperature 101°F.",
-    "question": "What is the patient'\''s temperature?",
-    "temperature": 0.7
+    "patient_id": 1,
+    "doctor_name": "Dr. Smith",
+    "diagnosis": "Type 2 Diabetes",
+    "medicines": [
+      {"name": "Metformin", "dose": "500mg", "frequency": "Twice daily"}
+    ],
+    "notes": "Monitor blood glucose levels"
   }'
-```
-
-**Response:**
-```json
-{
-  "answer": "The patient's temperature is 101°F.",
-  "question": "What is the patient's temperature?",
-  "confidence": 0.95
-}
-```
-
----
-
-### 4. Document Upload
-
-**Endpoint:** `POST /api/v1/upload/document`
-
-**Description:** Upload and process PDF or text documents
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/api/v1/upload/document" \
-  -F "file=@medical_report.pdf"
-```
-
-**Supported Formats:** PDF, TXT
-
-**Response:**
-```json
-{
-  "processed": true,
-  "filename": "medical_report.pdf",
-  "text_length": 1523,
-  "message": "Document processed and added to vector store"
-}
-```
-
----
-
-### 5. Image Upload
-
-**Endpoint:** `POST /api/v1/upload/image`
-
-**Description:** Upload and process medical images with OCR
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/api/v1/upload/image" \
-  -F "file=@xray_report.jpg"
-```
-
-**Supported Formats:** JPG, JPEG, PNG, TIFF
-
-**Response:**
-```json
-{
-  "processed": true,
-  "filename": "xray_report.jpg",
-  "extracted_text": "X-Ray Report: No abnormalities detected...",
-  "text_length": 245
-}
-```
-
----
-
-### 6. RAG Summarization
-
-**Endpoint:** `POST /api/v1/rag/summarize`
-
-**Description:** Generate summary using RAG for large documents
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/api/v1/rag/summarize" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "max_length": 512,
-    "temperature": 0.7,
-    "top_k": 5
-  }'
-```
-
-**Response:**
-```json
-{
-  "summary": "Comprehensive summary of all documents in vector store...",
-  "chunks_used": 5,
-  "summary_length": 487
-}
-```
-
----
-
-### 7. RAG Question Answering
-
-**Endpoint:** `POST /api/v1/rag/question`
-
-**Description:** Answer questions using RAG retrieval
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/api/v1/rag/question" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "What are the main findings?",
-    "top_k": 5,
-    "temperature": 0.7
-  }'
-```
-
-**Response:**
-```json
-{
-  "answer": "The main findings include...",
-  "question": "What are the main findings?",
-  "relevant_chunks": ["chunk1", "chunk2"],
-  "confidence": 0.92
-}
 ```
 
 ---
 
 ## 💡 Usage Examples
 
-### Python Example - Text Summarization
+### Frontend Usage - Patient Workflow
 
+1. **Login**
+```
+URL: http://localhost:5173
+Username: doctor
+Password: doctor123
+```
+
+2. **View Patients**
+- Dashboard shows all patients
+- Search by name
+- Click patient to view details
+
+3. **Upload Report**
+- Go to Reports tab
+- Click "Upload Report"
+- Select PDF, TXT, JPG, or PNG file
+- Fill in title and doctor name
+- Click "Upload"
+
+4. **AI Analyze**
+- Click "🧠 AI Analyze" button on any report
+- Wait for AI to process
+- View results inline
+
+### Backend Usage - Python Examples
+
+**Example 1 - Login and Get Patients**
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/summarize"
-payload = {
-    "text": "Patient presents with fever and cough. Temperature 101°F. Prescribed antibiotics.",
-    "temperature": 0.7
-}
+# Login
+response = requests.post("http://localhost:8000/login", json={
+    "username": "doctor",
+    "password": "doctor123"
+})
+token = response.json()["access_token"]
 
-response = requests.post(url, json=payload)
+# Get patients
+headers = {"Authorization": f"Bearer {token}"}
+response = requests.get("http://localhost:8000/patients", headers=headers)
 print(response.json())
 ```
 
-### Python Example - Question Answering
-
+**Example 2 - Upload and Analyze Report**
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/analyze"
-payload = {
-    "text": "Patient presents with fever and cough. Temperature 101°F.",
-    "question": "What is the patient's temperature?"
-}
+# Upload report
+with open("report.pdf", "rb") as f:
+    files = {"file": f}
+    data = {
+        "patient_id": 1,
+        "title": "Blood Test",
+        "doctor_name": "Dr. Smith"
+    }
+    response = requests.post(
+        "http://localhost:8000/reports",
+        files=files,
+        data=data
+    )
+    report = response.json()
 
-response = requests.post(url, json=payload)
+# Analyze with AI
+response = requests.post("http://localhost:8000/api/v1/summarize", json={
+    "text": "Patient blood test shows elevated glucose levels..."
+})
 print(response.json())
 ```
 
-### Python Example - Document Upload
-
+**Example 3 - Add Prescription**
 ```python
 import requests
 
-url = "http://localhost:8000/api/v1/upload/document"
-files = {"file": open("medical_report.pdf", "rb")}
-
-response = requests.post(url, files=files)
+response = requests.post("http://localhost:8000/prescriptions", json={
+    "patient_id": 1,
+    "doctor_name": "Dr. Smith",
+    "diagnosis": "Type 2 Diabetes",
+    "medicines": [
+        {"name": "Metformin", "dose": "500mg", "frequency": "Twice daily"}
+    ],
+    "notes": "Monitor blood glucose"
+})
 print(response.json())
 ```
 
-### Python Example - RAG Question
+---
 
-```python
-import requests
+## 📊 Database & Data
 
-# First upload a document
-url_upload = "http://localhost:8000/api/v1/upload/document"
-files = {"file": open("medical_report.pdf", "rb")}
-requests.post(url_upload, files=files)
+### Database Schema
 
-# Then query it
-url_query = "http://localhost:8000/api/v1/rag/question"
-payload = {
-    "question": "What are the main findings?",
-    "top_k": 5
-}
-
-response = requests.post(url_query, json=payload)
-print(response.json())
+**Users Table**
 ```
+id | username | password | role
+```
+
+**Patients Table**
+```
+id | name | age | gender | created_at
+```
+
+**Prescriptions Table**
+```
+id | patient_id | doctor_name | diagnosis | medicines (JSON) | notes | created_at
+```
+
+**Reports Table**
+```
+id | patient_id | doctor_name | title | file_path | created_at
+```
+
+### Sample Data
+
+The project includes a seed script to populate sample data:
+
+```bash
+python scripts/seed_patients.py
+```
+
+This creates 5 realistic patient profiles with:
+- Patient information (name, age, gender)
+- Medical conditions and prescriptions
+- Sample medical reports (PDF/TXT files)
+
+### File Storage
+
+- **Database**: `data/pms.db` (SQLite)
+- **Uploads**: `data/uploads/` (PDF, TXT, JPG, PNG files)
+- **Models**: `models/` (AI model cache)
+- **Logs**: `logs/` (application logs)
 
 ---
 
@@ -509,54 +648,83 @@ print(response.json())
 ### Using Docker Compose (Recommended)
 
 ```bash
-# Build and start
+# Build and start both frontend and backend
 docker-compose up -d
 
 # View logs
 docker-compose logs -f
 
-# Stop
+# View specific service logs
+docker-compose logs -f backend
+docker-compose logs -f frontend
+
+# Stop all services
 docker-compose down
+
+# Rebuild images
+docker-compose up -d --build
 ```
 
 ### Using Docker Directly
 
+**Build image:**
 ```bash
-# Build image
-docker build -t medical-report-api .
+docker build -t medgemma-pms .
+```
 
-# Run container
+**Run container:**
+```bash
 docker run -d \
   -p 8000:8000 \
+  -v $(pwd)/data:/app/data \
   -v $(pwd)/models:/app/models \
-  -v $(pwd)/vector_store:/app/vector_store \
   -v $(pwd)/logs:/app/logs \
   --env-file .env \
-  --name medical-api \
-  medical-report-api
+  --name medgemma-backend \
+  medgemma-pms
+```
 
-# View logs
-docker logs -f medical-api
+**View logs:**
+```bash
+docker logs -f medgemma-backend
+```
 
-# Stop container
-docker stop medical-api
+**Stop container:**
+```bash
+docker stop medgemma-backend
+docker rm medgemma-backend
 ```
 
 ### GPU Support in Docker
 
-Ensure NVIDIA Container Toolkit is installed:
-
+**Install NVIDIA Container Toolkit:**
 ```bash
-# Install NVIDIA Container Toolkit
 sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
+```
 
-# Run with GPU
+**Run with GPU:**
+```bash
 docker run -d \
   --gpus all \
   -p 8000:8000 \
   --env-file .env \
-  medical-report-api
+  medgemma-pms
+```
+
+### Docker Compose with GPU
+
+Update `docker-compose.yml`:
+```yaml
+services:
+  backend:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 ```
 
 ---
@@ -564,193 +732,337 @@ docker run -d \
 ## 📁 Project Structure
 
 ```
-hack-nagpur/
+medgemma-pms/
 │
-├── app/                          # Main application code
-│   ├── api/                      # API routes and endpoints
-│   │   └── routes.py            # All API endpoints (7 endpoints)
-│   ├── models/                   # Model management
-│   │   └── model_loader.py      # MedGemma model loader
-│   ├── processors/               # Document/image processing
-│   │   ├── document_processor.py
-│   │   └── image_processor.py
-│   ├── rag/                      # RAG implementation
-│   │   ├── vector_store.py      # Vector store management
-│   │   └── rag_pipeline.py      # RAG pipeline
-│   ├── schemas/                  # Request/response models
-│   │   ├── requests.py
-│   │   └── responses.py
-│   ├── utils/                    # Utilities
-│   │   └── logger.py            # Logging configuration
-│   ├── config.py                # Configuration management
-│   └── main.py                  # FastAPI application
+├── 📂 app/                           # FastAPI Backend
+│   ├── api/
+│   │   ├── patients.py              # Patient, prescription, report CRUD
+│   │   └── routes.py                # AI analysis endpoints
+│   ├── models/
+│   │   └── model_loader.py          # MedGemma model management
+│   ├── processors/
+│   │   ├── document_processor.py    # PDF/TXT text extraction
+│   │   └── image_processor.py       # Image processing & analysis
+│   ├── rag/
+│   │   ├── vector_store.py          # Vector store (ChromaDB)
+│   │   └── rag_pipeline.py          # RAG pipeline
+│   ├── schemas/
+│   │   ├── requests.py              # Request models
+│   │   └── responses.py             # Response models
+│   ├── utils/
+│   │   └── logger.py                # Logging setup
+│   ├── config.py                    # Configuration
+│   ├── database.py                  # SQLite schema & init
+│   └── main.py                      # FastAPI app factory
 │
-├── tests/                        # Test suite
-│   ├── test_api.py              # API endpoint tests
-│   └── test_processors.py       # Processor tests
+├── 📂 frontend/doctorms/             # React + TypeScript Frontend
+│   ├── src/
+│   │   ├── App.tsx                  # Main dashboard component
+│   │   ├── Login.tsx                # Login page
+│   │   ├── PatientDetails.tsx       # Patient profile with tabs
+│   │   ├── PrescriptionsTab.tsx     # Prescription management
+│   │   ├── ReportsTab.tsx           # Report upload & AI analysis
+│   │   ├── components/              # Reusable components
+│   │   ├── App.css                  # Component styles
+│   │   └── index.css                # Global styles & CSS variables
+│   ├── vite.config.ts               # Vite configuration with proxy
+│   ├── tsconfig.json                # TypeScript config
+│   ├── package.json                 # Node dependencies
+│   └── index.html                   # HTML entry point
 │
-├── examples/                     # Usage examples
-│   └── example_usage.py         # Example scripts
+├── 📂 scripts/                       # Utility Scripts
+│   ├── seed_patients.py             # Populate sample data
+│   ├── test_sample.py               # API smoke tests
+│   ├── setup.sh                     # Linux/Mac setup
+│   └── setup.ps1                    # Windows setup
 │
-├── scripts/                      # Setup scripts
-│   ├── setup.sh                 # Linux/Mac setup
-│   └── setup.ps1                # Windows setup
+├── 📂 tests/                        # Test Suite
+│   ├── test_api.py                  # API tests
+│   └── test_processors.py           # Processor tests
 │
-├── requirements.txt              # Python dependencies
-├── .env.example                  # Environment template
-├── Dockerfile                    # Docker configuration
-├── docker-compose.yml            # Docker Compose setup
-├── pytest.ini                    # Pytest configuration
-├── Makefile                      # Common commands
-├── setup.py                      # Package setup
-└── run.py                        # Application entry point
+├── 📂 examples/                     # Usage Examples
+│   └── example_usage.py             # API usage examples
+│
+├── 📂 data/                         # Runtime Data (git-ignored)
+│   ├── pms.db                       # SQLite database
+│   └── uploads/                     # Uploaded files
+│
+├── 📂 models/                       # AI Model Cache (git-ignored)
+│   └── medgemma-1.5-4b/             # Downloaded model
+│
+├── 📂 logs/                         # Application Logs (git-ignored)
+│   └── app.log
+│
+├── README.md                        # This file
+├── DESIGN.md                        # Architecture & design doc
+├── requirements.txt                 # Python dependencies
+├── .env.example                     # Environment template
+├── .gitignore                       # Git ignore rules
+├── Dockerfile                       # Docker image
+├── docker-compose.yml               # Docker Compose setup
+├── Makefile                         # Common commands
+├── pytest.ini                       # Pytest config
+├── setup.py                         # Package setup
+└── run.py                           # Backend entry point
 ```
 
 ---
 
 ## 🛠️ Technology Stack
 
+### Frontend
+| Component | Technology | Version |
+|-----------|-----------|---------|
+| **Framework** | React | 19.2.0 |
+| **Language** | TypeScript | 5.x |
+| **Build Tool** | Vite | 7.2.4 |
+| **Styling** | CSS Variables | Native |
+| **HTTP Client** | Fetch API | Native |
+| **State Management** | React Hooks | Native |
+
+### Backend
 | Component | Technology | Version |
 |-----------|-----------|---------|
 | **Framework** | FastAPI | >=0.109.0 |
+| **Server** | Uvicorn | >=0.27.0 |
+| **Database** | SQLite | 3.x |
+| **ORM** | sqlite3 | Native |
 | **ML Framework** | PyTorch | >=2.0.0 |
-| **Transformers** | Hugging Face Transformers | >=4.37.0 |
-| **Model** | Google MedGemma | 2B parameters |
+| **Transformers** | Hugging Face | >=4.37.0 |
+| **AI Model** | Google MedGemma 1.5 4B | 4B params |
 | **Vector Store** | ChromaDB | >=0.4.0 |
 | **Embeddings** | Sentence Transformers | >=2.3.0 |
 | **Document Processing** | PyPDF | >=4.0.0 |
 | **Image Processing** | Pillow | >=10.0.0 |
 | **Logging** | Loguru | >=0.7.0 |
-| **Configuration** | Pydantic Settings | >=2.1.0 |
+| **Validation** | Pydantic | >=2.1.0 |
 | **Testing** | Pytest | >=7.4.0 |
-| **Deployment** | Docker, Docker Compose | Latest |
+
+### DevOps
+| Component | Technology |
+|-----------|-----------|
+| **Containerization** | Docker |
+| **Orchestration** | Docker Compose |
+| **Version Control** | Git |
 
 ---
 
 ## 💻 Development
 
-### Running Tests
+### Backend Development
 
+**Run in development mode with auto-reload:**
 ```bash
-# Run all tests
+python run.py
+# or
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Run tests:**
+```bash
+# All tests
 pytest
 
-# Run with verbose output
+# Verbose output
 pytest -v
 
-# Run with coverage
+# With coverage
 pytest --cov=app --cov-report=html
 
-# Run specific test file
-pytest tests/test_api.py -v
-
-# Run specific test
+# Specific test
 pytest tests/test_api.py::test_health_check -v
 ```
 
-### Code Formatting
+### Frontend Development
 
+**Run dev server with hot reload:**
 ```bash
-# Format code with black (if installed)
-black app/ tests/
+cd frontend/doctorms
+npm run dev
+```
 
-# Check formatting
-black --check app/ tests/
+**Build for production:**
+```bash
+npm run build
+```
+
+**Type checking:**
+```bash
+npm run type-check
 ```
 
 ### Development Workflow
 
-1. **Make changes** to code
-2. **Run tests** with pytest
-3. **Test manually** using interactive docs
-4. **Check logs** for any issues
-5. **Commit** changes
+1. **Backend changes** → Tests pass → Check API docs
+2. **Frontend changes** → Hot reload → Check browser
+3. **Database changes** → Reset DB → Seed sample data
+4. **Both changes** → Run both servers → Test full workflow
+5. **Commit** → Push to GitHub
+
+### Useful Commands
+
+```bash
+# Seed sample data
+python scripts/seed_patients.py
+
+# Run API smoke tests
+python scripts/test_sample.py
+
+# Check backend syntax
+python -m py_compile app/api/patients.py
+
+# Check frontend types
+cd frontend/doctorms && npm run type-check
+```
 
 ---
 
 ## 🧪 Testing
 
-### Manual Testing
+### Manual Testing - Frontend
 
-Use the interactive API documentation:
+1. Start both servers (backend + frontend)
+2. Open http://localhost:5173
+3. Login with `doctor/doctor123`
+4. Test workflows:
+   - View patient list
+   - Click patient to view details
+   - Upload a report
+   - Click "AI Analyze"
+   - Add a prescription
+   - Check error handling
 
-1. Start the API: `python run.py`
-2. Open browser: http://localhost:8000/docs
-3. Try different endpoints
-4. Check responses
+### Manual Testing - Backend API
 
-### Example Test Script
+Use the interactive Swagger UI:
 
-```python
-import requests
+1. Start backend: `python run.py`
+2. Open http://localhost:8000/docs
+3. Try endpoints:
+   - `GET /health` - Check API status
+   - `POST /login` - Test authentication
+   - `GET /patients` - List patients
+   - `POST /api/v1/summarize` - Test AI
 
-# Test health endpoint
-response = requests.get("http://localhost:8000/health")
-print(response.json())
+### Automated Testing
 
-# Test summarization
-response = requests.post(
-    "http://localhost:8000/api/v1/summarize",
-    json={
-        "text": "Patient presents with fever and cough.",
-        "temperature": 0.7
-    }
-)
-print(response.json())
+```bash
+# Run all backend tests
+pytest
+
+# Run with verbose output
+pytest -v
+
+# Run specific test file
+pytest tests/test_api.py -v
+
+# Run with coverage report
+pytest --cov=app --cov-report=html
 ```
+
+### Test Coverage
+
+- API endpoints (login, patients, reports, prescriptions)
+- Document processing (PDF, TXT extraction)
+- Image processing (JPG, PNG handling)
+- Error handling and validation
 
 ---
 
 ## 🔧 Troubleshooting
 
-### Common Issues
+### Frontend Issues
+
+#### Issue: Frontend won't start
+```bash
+# Clear node_modules and reinstall
+cd frontend/doctorms
+rm -rf node_modules package-lock.json
+npm install
+npm run dev
+```
+
+#### Issue: API calls failing (CORS error)
+- Ensure backend is running on `localhost:8000`
+- Check Vite proxy config in `vite.config.ts`
+- Verify `.env` has correct API URL
+
+#### Issue: Login not working
+- Check default credentials: `doctor/doctor123`
+- Verify database exists: `data/pms.db`
+- Check backend logs for errors
+
+#### Issue: File upload fails
+- Ensure `data/uploads/` directory exists
+- Check file size (max 50MB)
+- Verify file format (PDF, TXT, JPG, PNG)
+
+### Backend Issues
 
 #### Issue: Model download is slow
-**Solution:** First run downloads the model (~2-4GB). Be patient or use a pre-downloaded model.
+- First run downloads model (~2-4GB)
+- Be patient or use pre-downloaded model
+- Check internet connection
 
 #### Issue: Out of memory
-**Solutions:**
-- Use CPU mode: `MODEL_DEVICE=cpu`
-- Enable quantization: `MODEL_QUANTIZATION=4bit`
-- Reduce max length: `MAX_MODEL_LENGTH=1024`
-
-#### Issue: CUDA not available
-**Solutions:**
-- Check CUDA installation: `nvidia-smi`
-- Install CUDA toolkit
-- Or use CPU mode: `MODEL_DEVICE=cpu`
+```env
+MODEL_DEVICE=cpu
+MODEL_QUANTIZATION=4bit
+MAX_MODEL_LENGTH=1024
+```
 
 #### Issue: Port 8000 already in use
-**Solutions:**
-- Change port in `.env`: `API_PORT=8001`
-- Or kill process using port 8000
+```bash
+# Change port in .env
+API_PORT=8001
 
-#### Issue: Dependencies installation fails
-**Solutions:**
-- Update pip: `pip install --upgrade pip`
-- Use fresh virtual environment
-- Install PyTorch separately first
+# Or kill process using port 8000
+# Windows: netstat -ano | findstr :8000
+# Linux: lsof -i :8000
+```
+
+#### Issue: Database locked
+```bash
+# Remove old database and reseed
+rm data/pms.db
+python scripts/seed_patients.py
+```
+
+#### Issue: Dependencies fail to install
+```bash
+# Update pip and reinstall
+pip install --upgrade pip
+pip install -r requirements.txt --force-reinstall
+```
 
 ### Debug Mode
 
-Enable debug logging:
-
+**Enable debug logging:**
 ```env
 LOG_LEVEL=DEBUG
 ```
 
-Check logs:
-
+**Check logs:**
 ```bash
+# Backend logs
 tail -f logs/app.log
+
+# Frontend console
+# Open browser DevTools (F12) → Console tab
+```
+
+**Test API health:**
+```bash
+curl http://localhost:8000/health
 ```
 
 ### Getting Help
 
-1. Check logs: `tail -f logs/app.log`
-2. Enable debug mode: `LOG_LEVEL=DEBUG`
+1. Check logs (backend and browser console)
+2. Enable debug mode
 3. Review this documentation
-4. Check GitHub issues
+4. Check DESIGN.md for architecture details
+5. Open GitHub issue with logs
 
 ---
 
