@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  medical-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medical-report-api
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - MODEL_DEVICE=cuda
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./models:/app/models
+      - ./vector_store:/app/vector_store
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+

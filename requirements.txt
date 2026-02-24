@@ -1,0 +1,35 @@
+# Core API Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# ML and AI
+torch>=2.0.0
+transformers>=4.37.0
+accelerate>=0.26.0
+pillow>=10.0.0
+
+# RAG and Vector Store
+langchain>=0.1.0
+langchain-community>=0.0.16
+langchain-text-splitters>=0.2.0
+langchain-huggingface>=0.1.0
+chromadb>=0.4.0
+sentence-transformers>=2.3.0
+
+# Document Processing
+pypdf>=4.0.0
+python-multipart>=0.0.6
+
+# Utilities
+python-dotenv>=1.0.0
+httpx>=0.26.0
+
+# Logging and Monitoring
+loguru>=0.7.0
+
+# Development
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+llama-cpp-python
