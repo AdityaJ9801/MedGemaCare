@@ -1,4 +1,4 @@
-# Medical Report Analysis API
+# MedGemaCare
 
 > **Production-grade FastAPI application for medical report summarization and analysis using Google's MedGemma model with RAG (Retrieval-Augmented Generation) capabilities.**
 
