@@ -913,5 +913,4 @@ For issues and questions:
 
 **Built with ❤️ for the future of healthcare AI**
 
-#   P r i v a c y - S a f e - H e a l t h - R e c o r d - S u m m a r y - G e n e r a t o r  
- 
+#
